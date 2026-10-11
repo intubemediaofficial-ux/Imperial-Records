@@ -14,7 +14,7 @@ type Enquiry = {
 };
 
 type FieldType = "text" | "textarea" | "checkbox" | "image" | "list";
-type Field = { key: string; label: string; type?: FieldType; placeholder?: string; options?: string[]; fields?: Field[]; blank?: object; addLabel?: string };
+type Field = { key: string; label: string; type?: FieldType; placeholder?: string; options?: (string | { value: string; label: string })[]; fields?: Field[]; blank?: object; addLabel?: string };
 
 const input = "w-full rounded-lg border border-[#164640] bg-[#031413] px-3 py-2.5 text-sm text-white placeholder:text-gray-600 focus:border-[#d9b45a] focus:outline-none";
 const card = "rounded-2xl border border-[#164640] bg-[#0a2e2a] p-5";
@@ -80,7 +80,7 @@ function FieldInput({ field, value, onChange }: { field: Field; value: unknown; 
         </div>
       ) : field.options ? (
         <select className={input} value={String(value ?? "")} onChange={(e) => onChange(e.target.value)}>
-          {field.options.map((o) => <option key={o}>{o}</option>)}
+          {field.options.map((o) => typeof o === "string" ? <option key={o}>{o}</option> : <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       ) : (
         <input className={input} value={String(value ?? "")} placeholder={field.placeholder} onChange={(e) => onChange(e.target.value)} />
@@ -292,9 +292,9 @@ function PasswordForm() {
   );
 }
 
-function QuickAddRelease({ categories, artists, onAdd }: { categories: string[]; artists: string[]; onAdd: (r: Release) => void }) {
+function QuickAddRelease({ categories, artists, onAdd }: { categories: { value: string; label: string }[]; artists: string[]; onAdd: (r: Release) => void }) {
   const [url, setUrl] = useState("");
-  const [category, setCategory] = useState(categories[0] || "");
+  const [category, setCategory] = useState(categories[0]?.value || "");
   const [artist, setArtist] = useState(artists[0] || "");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
@@ -303,7 +303,7 @@ function QuickAddRelease({ categories, artists, onAdd }: { categories: string[];
       <p className="mb-3 font-bold text-white">Quick add from YouTube</p>
       <div className="grid gap-3 md:grid-cols-[1fr_200px_200px_auto]">
         <input className={input} placeholder="Paste YouTube link…" value={url} onChange={(e) => setUrl(e.target.value)} />
-        <select className={input} value={category} onChange={(e) => setCategory(e.target.value)}>{categories.map((c) => <option key={c}>{c}</option>)}</select>
+        <select className={input} value={category} onChange={(e) => setCategory(e.target.value)}>{categories.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}</select>
         <select className={input} value={artist} onChange={(e) => setArtist(e.target.value)}>{artists.map((c) => <option key={c}>{c}</option>)}</select>
         <button className={btnGold} disabled={!url || busy} onClick={async () => {
           setBusy(true); setErr("");
@@ -404,10 +404,11 @@ function Dashboard({ email, onLogout }: { email: string; onLogout: () => void })
   if (!content) return <div className="flex min-h-screen items-center justify-center bg-[#031413]"><Loader2 className="animate-spin text-[#d9b45a]" size={32} /></div>;
 
   const catSlugs = content.categories.map((c) => c.slug);
+  const catOptions = content.categories.map((c) => ({ value: c.slug, label: c.name }));
   const artistNames = content.artists.map((a) => a.name);
   const releaseFields: Field[] = [
     { key: "title", label: "Song title" }, { key: "hindi", label: "Hindi title (optional)" },
-    { key: "artist", label: "Artist" }, { key: "category", label: "Category", options: catSlugs },
+    { key: "artist", label: "Artist" }, { key: "category", label: "Category", options: catOptions },
     { key: "youtubeId", label: "YouTube video ID or link", placeholder: "U8mQO-aNVqU" }, { key: "date", label: "Release date", placeholder: "2026-10-11" },
     { key: "spotify", label: "Spotify link (optional)" }, { key: "jiosaavn", label: "JioSaavn link (optional)" }, { key: "apple", label: "Apple Music link (optional)" },
     { key: "featured", label: "Show on Home page (featured)", type: "checkbox" },
@@ -516,7 +517,7 @@ function Dashboard({ email, onLogout }: { email: string; onLogout: () => void })
 
           {tab === "releases" && (
             <Section title="Songs / Releases" desc="All songs on the website. Order here = order on website (top = newest).">
-              <QuickAddRelease categories={catSlugs} artists={artistNames} onAdd={(r) => setReleases([r, ...content.releases])} />
+              <QuickAddRelease categories={catOptions} artists={artistNames} onAdd={(r) => setReleases([r, ...content.releases])} />
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="text-sm text-gray-400">Filter:</span>
                 <select className={`${input} !w-auto`} value={releaseFilter} onChange={(e) => setReleaseFilter(e.target.value)}>

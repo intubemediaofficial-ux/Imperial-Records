@@ -57,7 +57,7 @@ export default function Header({ settings, categories, topStrip, ctaButton }: { 
                   <Link href={n.href} className={`flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition ${active(n.href) ? "text-gold" : "text-cream/85 hover:text-gold"}`}>
                     {n.label} <ChevronDown size={14} className="transition group-hover:rotate-180" />
                   </Link>
-                  <div className="invisible absolute left-1/2 top-full w-[560px] -translate-x-1/2 pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100">
+                  <div className="invisible absolute left-1/2 top-full w-[560px] -translate-x-1/2 pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                     <div className="grid grid-cols-2 gap-1 rounded-2xl border border-gold/20 bg-deep/95 p-3 shadow-2xl backdrop-blur-xl">
                       {categories.map((c) => (
                         <Link key={c.slug} href={`/music/${c.slug}`} className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-gold/10">
