@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cinzel), Georgia, serif;
+  --font-hindi: var(--font-hindi), var(--font-poppins), serif;
+  --color-ink: #031413;
+  --color-deep: #062320;
+  --color-panel: #0a2e2a;
+  --color-line: #164640;
+  --color-gold: #d9b45a;
+  --color-gold-light: #f6dd96;
+  --color-saffron: #ff9a3c;
+  --color-cream: #f6efe0;
+  --color-muted: #9fb7b2;
+}
+
+html { background: var(--color-ink); scroll-behavior: smooth; }
+body { background: var(--color-ink); color: var(--color-cream); font-family: var(--font-sans); overflow-x: hidden; }
+
+::selection { background: var(--color-gold); color: #031413; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #031413; }
+::-webkit-scrollbar-thumb { background: #1f5a52; border-radius: 8px; }
+
+@utility text-gold-gradient {
+  background: linear-gradient(100deg, #b8892b 0%, #f6dd96 45%, #d9b45a 70%, #a77a22 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility bg-gold-gradient { background: linear-gradient(110deg, #b8892b, #f3d27a 50%, #c89a3c); }
+@utility bg-royal {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(217, 180, 90, 0.12), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(255, 154, 60, 0.08), transparent 60%),
+    linear-gradient(180deg, #062320 0%, #031413 100%);
+}
+@utility pattern-mandala {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23d9b45a' stroke-opacity='0.07'%3E%3Ccircle cx='60' cy='60' r='28'/%3E%3Ccircle cx='60' cy='60' r='44'/%3E%3Cpath d='M60 16c8 14 8 30 0 44-8-14-8-30 0-44zM60 104c8-14 8-30 0-44-8 14-8 30 0 44zM16 60c14-8 30-8 44 0-14 8-30 8-44 0zM104 60c-14-8-30-8-44 0 14 8 30 8 44 0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-marquee { animation: marquee 40s linear infinite; }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 60s linear infinite; }
+@keyframes glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+.animate-glow { animation: glow 3s ease-in-out infinite; }
+@keyframes kenburns { from { transform: scale(1.04); } to { transform: scale(1.14); } }
+.animate-kenburns { animation: kenburns 9s ease-out forwards; }
+
+.font-hindi { font-family: var(--font-hindi); }
+.card-royal {
+  background: linear-gradient(180deg, rgba(10, 46, 42, 0.9), rgba(6, 35, 32, 0.9));
+  border: 1px solid rgba(217, 180, 90, 0.16);
+}
+.card-royal:hover { border-color: rgba(217, 180, 90, 0.45); }
+.divider-gold { height: 1px; background: linear-gradient(90deg, transparent, rgba(217, 180, 90, 0.7), transparent); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
